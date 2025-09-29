@@ -1,3 +1,9 @@
+const AVATAR_IMG = 6;
+const PICTURES_COUNT = 25;
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
+const MAX_COMMENT_COUNT = 30;
+
 const NAMES = [ 'Артём', 'Александр', 'Иван', 'Елена', 'Кристина', 'Роман', 'Анна', 'Георгий', 'Сергей', 'Вероника'];
 const MESSAGES = [
   'Всё отлично!',
@@ -26,21 +32,21 @@ const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const idGenerator = function() {
-  let lastGeneratedId = 42;
-  lastGeneratedId += 2*5;
+const idGenerator = () => {
+  let lastGeneratedId = 0;
+  lastGeneratedId += 1;
   return lastGeneratedId;
 };
 
 const createComment = () => ({
   id: idGenerator(),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+  avatar: `img/avatar-${getRandomInteger(1, AVATAR_IMG)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES)
 });
 
-const generateComments = function() {
-  const commentsCount = getRandomInteger(0, 30);
+const generateComments = () => {
+  const commentsCount = getRandomInteger(0, MAX_COMMENT_COUNT);
   return Array.from({length: commentsCount}, createComment);
 };
 
@@ -48,13 +54,13 @@ const createPhoto = (id) => ({
   id: id,
   url: `photos/${id}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(15, 200),
+  likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: generateComments()
 });
 
 const generatePhotos = function() {
   const photos = [];
-  for (let i = 1; i <= 25; i++) {
+  for (let i = 0; i < PICTURES_COUNT; i++) {
     photos.push(createPhoto(i));
   }
   return photos;
