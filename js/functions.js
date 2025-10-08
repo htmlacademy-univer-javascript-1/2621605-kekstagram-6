@@ -15,3 +15,19 @@ const checkPalindrome = function(word)
 
 checkLength('проверяемая строка', 20);
 checkPalindrome('Лёша на полке клопа нашёл');
+
+
+const timeInMinutes = (time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+const checkTime = (workStart, workEnd, meetingStart, meetingTime) => {
+  const workStartMinutes = timeInMinutes(workStart);
+  const workEndMinutes = timeInMinutes(workEnd);
+  const meetingStartMinutes = timeInMinutes(meetingStart);
+  const meetingEndMinutes = meetingStartMinutes + meetingTime;
+  return meetingStartMinutes >= workStartMinutes && meetingEndMinutes <= workEndMinutes;
+};
+
+checkTime('08:00', '17:30', '14:00', 90);
