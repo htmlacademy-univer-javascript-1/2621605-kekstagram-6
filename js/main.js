@@ -1,3 +1,4 @@
-import './data.js';
-import './util.js';
-import './mini-pictures.js';
+import {generatePhotos} from './data.js';
+import {renderPhotos} from './mini-pictures.js';
+
+renderPhotos(generatePhotos());

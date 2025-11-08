@@ -52,13 +52,10 @@ const createPhoto = (id) => ({
 
 const generatePhotos = function() {
   const photos = [];
-  for (let i = 0; i < PICTURES_COUNT; i++) {
+  for (let i = 1; i < PICTURES_COUNT; i++) {
     photos.push(createPhoto(i));
   }
   return photos;
 };
 
-const generatedPhotos = generatePhotos();
-
-// Для импорта в будущие модули, если это будет необходимо
-export {generatedPhotos};
+export {generatePhotos};
