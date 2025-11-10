@@ -1,4 +1,4 @@
-import { generatedPhotos } from './data.js';
+import {showBigPicture} from './big-photo.js';
 
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -13,6 +13,10 @@ const createThumbnail = (picture) => {
   pictureElement.querySelector('.picture__likes').textContent = likes;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
 
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    showBigPicture(picture);
+  });
   return pictureElement;
 };
 
@@ -23,4 +27,4 @@ const renderPhotos = (photos) => {
   pictures.appendChild(elementFragment);
 };
 
-renderPhotos(generatedPhotos);
+export {renderPhotos};
