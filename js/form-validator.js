@@ -1,3 +1,4 @@
+import { setEffects, resetEffects} from './photo-effects.js';
 import { isEscapeKey } from './util.js';
 
 const MAX_HASHTAGS = 5;
@@ -33,6 +34,7 @@ function closeForm()  {
   document.removeEventListener('keydown', onDocumentKeydown);
   form.reset();
   pristine.reset();
+  resetEffects();
 }
 
 const validateHashtags = (value) => {
@@ -133,6 +135,7 @@ const initFormValidation = () => {
   uploadInput.addEventListener('change', () => {
     openForm();
     updateSubmitButtonState();
+    setEffects();
   });
   cancelButton.addEventListener('click', closeForm);
   hashtagsInput.addEventListener('keydown', onHashtagsInputKeydown);
