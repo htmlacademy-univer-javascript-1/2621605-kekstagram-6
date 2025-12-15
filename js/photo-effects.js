@@ -15,13 +15,13 @@ const effectLevelValue = form.querySelector('.effect-level__value');
 let currentScale = 100;
 let currentFilter = 'none';
 
-const EFFECTS = {
-  none: {range: { min: 0, max: 1 }, start: 1, step: 0.1, connect: 'lower', applyFilter: () => 'none'},
-  chrome: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `grayscale(${value})`},
-  sepia: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `sepia(${value})`},
-  marvin: {range: {min: 0, max: 100}, start: 100, step: 1, applyFilter: (value) => `invert(${value}%)`},
-  phobos: {range: {min: 0, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `blur(${value}px)`},
-  heat: {range: {min: 1, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `brightness(${value})`}
+const Effects = {
+  NONE: {range: { min: 0, max: 1 }, start: 1, step: 0.1, connect: 'lower', applyFilter: () => 'none'},
+  CHROME: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `grayscale(${value})`},
+  SEPIA: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `sepia(${value})`},
+  MARVIN: {range: {min: 0, max: 100}, start: 100, step: 1, applyFilter: (value) => `invert(${value}%)`},
+  PHOBOS: {range: {min: 0, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `blur(${value}px)`},
+  HEAT: {range: {min: 1, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `brightness(${value})`}
 };
 
 const updateScale = () => {
@@ -58,13 +58,15 @@ const removeScale = () => {
 };
 
 const applyFilter = (value) => {
-  const effect = EFFECTS[currentFilter];
+  const effectKey = currentFilter.toUpperCase();
+  const effect = Effects[effectKey];
   imagePreview.style.filter = effect.applyFilter(value);
 };
 
 const updateSlider = (filterName) => {
   currentFilter = filterName;
-  const effect = EFFECTS[filterName];
+  const effectKey = filterName.toUpperCase();
+  const effect = Effects[effectKey];
 
   if (filterName === 'none') {
     effectLevelContainer.classList.add('hidden');
@@ -89,7 +91,7 @@ const onFilterChange = (evt) => {
 };
 
 const setFilters = () => {
-  noUiSlider.create(effectLevelSlider, EFFECTS.none);
+  noUiSlider.create(effectLevelSlider, Effects.NONE);
   effectLevelContainer.classList.add('hidden');
   currentFilter = 'none';
   const effectNone = form.querySelector('#effect-none');
@@ -116,6 +118,7 @@ const removeFilters = () => {
   if (noneEffectRadio) {
     noneEffectRadio.checked = true;
   }
+  currentFilter = 'none';
 };
 
 const setEffects = () => {
