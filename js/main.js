@@ -2,6 +2,7 @@ import { renderPhotos } from './mini-pictures.js';
 import { initFormValidation } from './form-validator.js';
 import { getDataFromServer } from './server-api.js';
 import { initFilters } from './filters.js';
+import './user-pictures.js';
 
 let photos = [];
 
@@ -31,4 +32,6 @@ const loadError = () => {
 getDataFromServer(loadSuccess, loadError);
 initFormValidation();
 
-export {photos};
+const getPhotos = () => photos.slice();
+
+export {getPhotos};
