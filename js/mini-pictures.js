@@ -3,6 +3,7 @@ import {showBigPicture} from './big-photo.js';
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const elementFragment = document.createDocumentFragment();
+const photos = pictures.getElementsByClassName('picture');
 
 const createThumbnail = (picture) => {
   const {url, description, likes, comments} = picture;
@@ -20,11 +21,17 @@ const createThumbnail = (picture) => {
   return pictureElement;
 };
 
-const renderPhotos = (photos) => {
-  photos.forEach((item) => {
+const renderPhotos = (images) => {
+  images.forEach((item) => {
     elementFragment.appendChild(createThumbnail(item));
   });
   pictures.appendChild(elementFragment);
 };
 
-export {renderPhotos};
+const removePhotos = () => {
+  if (photos) {
+    [...photos].forEach((photo) => photo.remove());
+  }
+};
+
+export {renderPhotos, removePhotos};

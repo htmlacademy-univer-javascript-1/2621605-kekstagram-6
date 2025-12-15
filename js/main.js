@@ -1,12 +1,15 @@
 import { renderPhotos } from './mini-pictures.js';
 import { initFormValidation } from './form-validator.js';
 import { getDataFromServer } from './server-api.js';
+import { initFilters } from './filters.js';
 
-// let photos = [];
+let photos = [];
 
 const loadSuccess = (data) => {
-  // photos = data.slice();
+  photos = data.slice()
   renderPhotos(data.slice());
+  initFilters();
+  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
 };
 
 const loadError = () => {
@@ -27,3 +30,5 @@ const loadError = () => {
 
 getDataFromServer(loadSuccess, loadError);
 initFormValidation();
+
+export {photos};
