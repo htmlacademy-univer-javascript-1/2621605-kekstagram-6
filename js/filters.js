@@ -1,6 +1,6 @@
 import { debounce, shuffleArray } from './util.js';
 import { renderPhotos, removePhotos } from './mini-pictures.js';
-import { photos } from './main.js';
+import { getPhotos } from './main.js';
 
 const RANDOM_PICS_COUNT = 10;
 const ACTIVE_BLOCK = 'img-filters__button--active';
@@ -8,11 +8,11 @@ const filtersForm = document.querySelector('.img-filters__form');
 
 const isFilterButton = (evt) => evt.target.tagName === 'BUTTON';
 
-const getDiscussedFilter = () => photos.slice().sort((a, b) => b.comments.length - a.comments.length);
+const getDiscussedFilter = () => getPhotos().sort((a, b) => b.comments.length - a.comments.length);
 
 const filtersKinds = {
-  'filter-default': () => photos.slice(),
-  'filter-random': () => shuffleArray(photos.slice()).slice(0, RANDOM_PICS_COUNT),
+  'filter-default': () => getPhotos(),
+  'filter-random': () => shuffleArray(getPhotos()).slice(0, RANDOM_PICS_COUNT),
   'filter-discussed': () => getDiscussedFilter()
 };
 
