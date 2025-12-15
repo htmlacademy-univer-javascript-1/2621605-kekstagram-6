@@ -6,7 +6,7 @@ import { initFilters } from './filters.js';
 let photos = [];
 
 const loadSuccess = (data) => {
-  photos = data.slice()
+  photos = data.slice();
   renderPhotos(data.slice());
   initFilters();
   document.querySelector('.img-filters').classList.remove('img-filters--inactive');
