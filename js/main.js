@@ -32,6 +32,6 @@ const loadError = () => {
 getDataFromServer(loadSuccess, loadError);
 initFormValidation();
 
-const getPhotos = () => photos.slice()
+const getPhotos = () => photos.slice();
 
 export {getPhotos};
