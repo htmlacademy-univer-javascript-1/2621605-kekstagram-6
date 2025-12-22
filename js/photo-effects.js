@@ -2,32 +2,75 @@ const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const STEP_SCALE = 25;
 
-const form = document.querySelector('.img-upload__form');
-const downsizeButton = form.querySelector('.scale__control--smaller');
-const enlargeButton = form.querySelector('.scale__control--bigger');
-const sizeValue = form.querySelector('.scale__control--value');
-const imagePreview = form.querySelector('.img-upload__preview img');
-const effectsList = form.querySelector('.effects__list');
-const effectLevelContainer = form.querySelector('.img-upload__effect-level');
-const effectLevelSlider = form.querySelector('.effect-level__slider');
-const effectLevelValue = form.querySelector('.effect-level__value');
+const formElement = document.querySelector('.img-upload__form');
+const downsizeButtonElement = formElement.querySelector('.scale__control--smaller');
+const enlargeButtonElement = formElement.querySelector('.scale__control--bigger');
+const sizeValueElement = formElement.querySelector('.scale__control--value');
+const imagePreviewElement = formElement.querySelector('.img-upload__preview img');
+const effectsListElement = formElement.querySelector('.effects__list');
+const effectLevelContainerElement = formElement.querySelector('.img-upload__effect-level');
+const effectLevelSliderElement = formElement.querySelector('.effect-level__slider');
+const effectLevelValueElement = formElement.querySelector('.effect-level__value');
+const effectNoneElement = formElement.querySelector('#effect-none');
+
+const Effects = {
+  NONE: {range: { min: 0, max: 1 }, start: 1, step: 0.1, connect: 'lower', applyFilter: () => 'none', format: {
+    to: function (value) {
+      return value;
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }},
+  CHROME: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `grayscale(${value})`, format: {
+    to: function (value) {
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }},
+  SEPIA: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `sepia(${value})`, format: {
+    to: function (value) {
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }},
+  MARVIN: {range: {min: 0, max: 100}, start: 100, step: 1, applyFilter: (value) => `invert(${value}%)`, format: {
+    to: function (value) {
+      return `${value}%`;
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }},
+  PHOBOS: {range: {min: 0, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `blur(${value}px)`, format: {
+    to: function (value) {
+      return `${value.toFixed(1)}px`;
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }},
+  HEAT: {range: {min: 1, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `brightness(${value})`, format: {
+    to: function (value) {
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    }
+  }}
+};
 
 let currentScale = 100;
 let currentFilter = 'none';
 
-const Effects = {
-  NONE: {range: { min: 0, max: 1 }, start: 1, step: 0.1, connect: 'lower', applyFilter: () => 'none'},
-  CHROME: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `grayscale(${value})`},
-  SEPIA: {range: {min: 0, max: 1}, start: 1, step: 0.1, applyFilter: (value) => `sepia(${value})`},
-  MARVIN: {range: {min: 0, max: 100}, start: 100, step: 1, applyFilter: (value) => `invert(${value}%)`},
-  PHOBOS: {range: {min: 0, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `blur(${value}px)`},
-  HEAT: {range: {min: 1, max: 3}, start: 3, step: 0.1, applyFilter: (value) => `brightness(${value})`}
-};
-
 const updateScale = () => {
-  sizeValue.value = `${currentScale}%`;
+  sizeValueElement.value = `${currentScale}%`;
   const scaleValue = currentScale / 100;
-  imagePreview.style.transform = `scale(${scaleValue})`;
+  imagePreviewElement.style.transform = `scale(${scaleValue})`;
 };
 
 const onSmallerClick = () => {
@@ -45,22 +88,22 @@ const onBiggerClick = () => {
 };
 
 const setScale = () => {
-  downsizeButton.addEventListener('click', onSmallerClick);
-  enlargeButton.addEventListener('click', onBiggerClick);
+  downsizeButtonElement.addEventListener('click', onSmallerClick);
+  enlargeButtonElement.addEventListener('click', onBiggerClick);
   currentScale = MAX_SCALE;
   updateScale();
 };
 
 const removeScale = () => {
-  downsizeButton.removeEventListener('click', onSmallerClick);
-  enlargeButton.removeEventListener('click', onBiggerClick);
-  imagePreview.style.transform = 'scale(1)';
+  downsizeButtonElement.removeEventListener('click', onSmallerClick);
+  enlargeButtonElement.removeEventListener('click', onBiggerClick);
+  imagePreviewElement.style.transform = 'scale(1)';
 };
 
 const applyFilter = (value) => {
   const effectKey = currentFilter.toUpperCase();
   const effect = Effects[effectKey];
-  imagePreview.style.filter = effect.applyFilter(value);
+  imagePreviewElement.style.filter = effect.applyFilter(value);
 };
 
 const updateSlider = (filterName) => {
@@ -69,16 +112,16 @@ const updateSlider = (filterName) => {
   const effect = Effects[effectKey];
 
   if (filterName === 'none') {
-    effectLevelContainer.classList.add('hidden');
-    imagePreview.style.filter = 'none';
+    effectLevelContainerElement.classList.add('hidden');
+    imagePreviewElement.style.filter = 'none';
   } else {
-    effectLevelContainer.classList.remove('hidden');
-    effectLevelSlider.noUiSlider.updateOptions({
+    effectLevelContainerElement.classList.remove('hidden');
+    effectLevelSliderElement.noUiSlider.updateOptions({
       range: effect.range,
       start: effect.start,
       step: effect.step
     });
-    effectLevelSlider.noUiSlider.set(effect.start);
+    effectLevelSliderElement.noUiSlider.set(effect.start);
     applyFilter(effect.start);
   }
 };
@@ -91,32 +134,30 @@ const onFilterChange = (evt) => {
 };
 
 const setFilters = () => {
-  noUiSlider.create(effectLevelSlider, Effects.NONE);
-  effectLevelContainer.classList.add('hidden');
+  noUiSlider.create(effectLevelSliderElement, Effects.NONE);
+  effectLevelContainerElement.classList.add('hidden');
   currentFilter = 'none';
-  const effectNone = form.querySelector('#effect-none');
-  if (effectNone) {
-    effectNone.checked = true;
+  if (effectNoneElement) {
+    effectNoneElement.checked = true;
   }
 
-  effectLevelSlider.noUiSlider.on('update', () => {
-    const value = effectLevelSlider.noUiSlider.get();
-    effectLevelValue.value = value;
+  effectLevelSliderElement.noUiSlider.on('update', () => {
+    const value = effectLevelSliderElement.noUiSlider.get();
+    effectLevelValueElement.value = value;
     applyFilter(parseFloat(value));
   });
-  effectsList.addEventListener('change', onFilterChange);
+  effectsListElement.addEventListener('change', onFilterChange);
 };
 
 const removeFilters = () => {
-  effectsList.removeEventListener('change', onFilterChange);
-  if (effectLevelSlider.noUiSlider) {
-    effectLevelSlider.noUiSlider.destroy();
+  effectsListElement.removeEventListener('change', onFilterChange);
+  if (effectLevelSliderElement.noUiSlider) {
+    effectLevelSliderElement.noUiSlider.destroy();
   }
-  imagePreview.style.filter = 'none';
-  imagePreview.className = '';
-  const noneEffectRadio = form.querySelector('#effect-none');
-  if (noneEffectRadio) {
-    noneEffectRadio.checked = true;
+  imagePreviewElement.style.filter = 'none';
+  imagePreviewElement.className = '';
+  if (effectNoneElement) {
+    effectNoneElement.checked = true;
   }
   currentFilter = 'none';
 };

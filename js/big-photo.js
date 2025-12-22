@@ -1,11 +1,14 @@
 import { isEscapeKey } from './util.js';
 
 const COMMENTS_PER_PART = 5;
-const bigPicture = document.querySelector('.big-picture');
-const socialComments = bigPicture.querySelector('.social__comments');
-const commentCountBlock = bigPicture.querySelector('.social__comment-count');
-const commentLoaderButton = bigPicture.querySelector('.comments-loader');
-const hidePictureButton = document.querySelector('.big-picture__cancel');
+
+const bigPictureElement = document.querySelector('.big-picture');
+const socialCommentsElement = bigPictureElement.querySelector('.social__comments');
+const commentCountBlockElement = bigPictureElement.querySelector('.social__comment-count');
+const commentLoaderButtonElement = bigPictureElement.querySelector('.comments-loader');
+const hidePictureButtonElement = document.querySelector('.big-picture__cancel');
+const totalCommentsElement = commentCountBlockElement.querySelector('.comments-count');
+
 let commentsShown = 0;
 let currentComments = [];
 
@@ -35,38 +38,35 @@ const createCommentElement = (comment) => {
   return commentElement;
 };
 
-hidePictureButton.addEventListener('click', hideBigPicture);
+hidePictureButtonElement.addEventListener('click', hideBigPicture);
 
 const updateCommentsCounter = () => {
-  const totalCommentsElement = commentCountBlock.querySelector('.comments-count');
   if (totalCommentsElement) {
     totalCommentsElement.textContent = currentComments.length;
   }
-  commentCountBlock.firstChild.textContent = `${commentsShown} из `;
+  commentCountBlockElement.firstChild.textContent = `${commentsShown} из `;
 };
 
-const renderComments = () => {
+const onCommentLoaderClick = () => {
   const commentsPart = currentComments.slice(commentsShown, commentsShown + COMMENTS_PER_PART);
   commentsPart.forEach((comment) => {
-    socialComments.append(createCommentElement(comment));
+    socialCommentsElement.append(createCommentElement(comment));
   });
   commentsShown += commentsPart.length;
   updateCommentsCounter();
-  if (commentsShown >= currentComments.length) {
-    commentLoaderButton.classList.add('hidden');
-  }
+  commentLoaderButtonElement.classList.toggle('hidden', commentsShown >= currentComments.length);
 };
 
 const clearComments = () => {
-  socialComments.innerHTML = '';
+  socialCommentsElement.innerHTML = '';
   commentsShown = 0;
   currentComments = [];
-  commentLoaderButton.classList.remove('hidden');
-  commentLoaderButton.removeEventListener('click', renderComments);
+  commentLoaderButtonElement.classList.remove('hidden');
+  commentLoaderButtonElement.removeEventListener('click', onCommentLoaderClick);
 };
 
 function hideBigPicture () {
-  bigPicture.classList.add('hidden');
+  bigPictureElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   clearComments();
@@ -74,19 +74,19 @@ function hideBigPicture () {
 
 const showBigPicture = (picture) => {
   const {url, description, likes, comments} = picture;
-  bigPicture.querySelector('.big-picture__img img').src = url;
-  bigPicture.querySelector('.big-picture__img').alt = description;
-  bigPicture.querySelector('.likes-count').textContent = likes;
-  bigPicture.querySelector('.comments-count').textContent = comments.length;
-  bigPicture.querySelector('.social__caption').textContent = description;
+  bigPictureElement.querySelector('.big-picture__img img').src = url;
+  bigPictureElement.querySelector('.big-picture__img').alt = description;
+  bigPictureElement.querySelector('.likes-count').textContent = likes;
+  bigPictureElement.querySelector('.comments-count').textContent = comments.length;
+  bigPictureElement.querySelector('.social__caption').textContent = description;
 
   clearComments();
   currentComments = comments;
-  renderComments();
-  commentLoaderButton.addEventListener('click', renderComments);
+  onCommentLoaderClick();
+  commentLoaderButtonElement.addEventListener('click', onCommentLoaderClick);
 
   document.body.classList.add('modal-open');
-  bigPicture.classList.remove('hidden');
+  bigPictureElement.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
 };
 

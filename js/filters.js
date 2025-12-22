@@ -4,7 +4,7 @@ import { getPhotos } from './main.js';
 
 const RANDOM_PICS_COUNT = 10;
 const ACTIVE_BLOCK = 'img-filters__button--active';
-const filtersForm = document.querySelector('.img-filters__form');
+const filtersFormElement = document.querySelector('.img-filters__form');
 
 const isFilterButton = (evt) => evt.target.tagName === 'BUTTON';
 
@@ -25,17 +25,17 @@ const onFiltersFormCLick = debounce((evt) => {
 
 const onFiltersButtonClick = (evt) => {
   if (isFilterButton(evt)) {
-    const chosenButton = filtersForm.querySelector(`.${ACTIVE_BLOCK}`);
-    if (chosenButton) {
-      chosenButton.classList.remove(ACTIVE_BLOCK);
+    const chosenButtonElement = filtersFormElement.querySelector(`.${ACTIVE_BLOCK}`);
+    if (chosenButtonElement) {
+      chosenButtonElement.classList.remove(ACTIVE_BLOCK);
     }
     evt.target.classList.add(ACTIVE_BLOCK);
   }
 };
 
 const initFilters = () => {
-  filtersForm.addEventListener('click', onFiltersFormCLick);
-  filtersForm.addEventListener('click', onFiltersButtonClick);
+  filtersFormElement.addEventListener('click', onFiltersFormCLick);
+  filtersFormElement.addEventListener('click', onFiltersButtonClick);
 };
 
 export { initFilters };

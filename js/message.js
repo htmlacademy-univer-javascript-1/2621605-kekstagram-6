@@ -15,6 +15,7 @@ const showMessage = (templateName) => {
     message.remove();
     document.removeEventListener('keydown', onEscapeKeydown);
     document.removeEventListener('click', onOuterClick);
+    closeButton.removeEventListener('click', closeMessage);
     setMessageState(false);
   }
 
